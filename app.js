@@ -53,8 +53,12 @@ Blog.insertMany([blogInitial, blogFinal], function(err){
 //creating the home route
 
 app.get('/', function(req, res){
- 
-  res.render('home', {newBlogs: newBlogs});
+ Blog.find({}, function(err, foundBlog){
+  if(!err){
+    res.render('home', {newBlogs: foundBlog});
+  }
+ })
+
 
   // res.render('home', {homeContent: homeStartingContent, newBlogs: newBlogs[0].title , newBlogs: newBlogs[0].body});
 })
