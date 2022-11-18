@@ -2,6 +2,7 @@
 
 const express = require("express");
 const bodyParser = require("body-parser");
+const mongoose = require('mongoose');
 const ejs = require("ejs");
 const _ = require('lodash');
 
@@ -18,10 +19,41 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
+//creating database connection... AND CREATING MONGOOSE MODEL
+
+mongoose.connect('mongodb://127.0.0.1:27017/blogDB');
+
+const blogSchema = {
+  title: String,
+  body: String
+}
+
+const  Blog = mongoose.model('blog', blogSchema);
+
+//INSERTING DEFAULT ITEMS INTO THE DATABASE...
+
+
+
+const blogInitial = new Blog({
+  title: 'Home',
+  body: 'It was the best of times, it was the worse of times. It was the age of wisdom, it was the age of foolishness. It was a spring of hope, It was a winter of despair. Are you feeling nostalgic? Has the loneliness resided? Have you successfully eliminated any reason to mingle... Is it worth it you ask?.. Think for a moment....'
+})
+const blogFinal = new Blog({
+  title: 'Away',
+  body: 'Have you been to Scotland before?? The journey to Scotland and the views is somehow significant to the race we have as humans. The view from the west midlands in the train all the way feeling the quiet ocean breeze.. At this point you have started seeing the highs and lows of the leaning Edingburgh valleys... with the cool breze... think for a moment..'
+})
+
+Blog.insertMany([blogInitial, blogFinal], function(err){
+  if(!err){
+    console.log('saved successfully..')
+  }
+})
+
 
 //creating the home route
 
 app.get('/', function(req, res){
+ 
   res.render('home', {newBlogs: newBlogs});
 
   // res.render('home', {homeContent: homeStartingContent, newBlogs: newBlogs[0].title , newBlogs: newBlogs[0].body});
