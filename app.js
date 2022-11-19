@@ -43,11 +43,15 @@ const blogFinal = new Blog({
   body: 'Have you been to Scotland before?? The journey to Scotland and the views is somehow significant to the race we have as humans. The view from the west midlands in the train all the way feeling the quiet ocean breeze.. At this point you have started seeing the highs and lows of the leaning Edingburgh valleys... with the cool breze... think for a moment..'
 })
 
-Blog.insertMany([blogInitial, blogFinal], function(err){
-  if(!err){
-    console.log('saved successfully..')
-  }
-})
+
+
+// Blog.find({}, function(err, foundResult){
+//   console.log(foundResult)
+//   if(!err){
+   
+//   }
+// })
+
 
 
 //creating the home route
@@ -55,12 +59,23 @@ Blog.insertMany([blogInitial, blogFinal], function(err){
 app.get('/', function(req, res){
  Blog.find({}, function(err, foundBlog){
   if(!err){
-    res.render('home', {newBlogs: foundBlog});
+    if(foundBlog.length === 0){
+      Blog.insertMany([blogInitial, blogFinal], function(err){
+        if(!err){
+          console.log('saved succesfully')
+          res.render('home', {newBlogs: foundBlog});
+        }
+      })
+    
+    }else{
+      res.render('home', {newBlogs: foundBlog});
+    }
+   
   }
  })
 
 
-  // res.render('home', {homeContent: homeStartingContent, newBlogs: newBlogs[0].title , newBlogs: newBlogs[0].body});
+  ;
 })
 
 //creating the post route
