@@ -129,13 +129,13 @@ app.get('/compose', function(req, res){
 //post route for the submitted new BLOG
 
 app.post('/compose/', function(req, res){
+    const newPost = new Blog({
+      title: req.body.postTitle,
+      body: req.body.postBody
+    })
 
-  const newPost = {
-    'title': req.body.postTitle,
-    'body': req.body.postBody
-  }
-  newBlogs.push(newPost)
-  res.redirect('/')
+    newPost.save();
+    res.redirect('/')
   // res.render('home', {homeContent: homeStartingContent, newBlogs: newBlogs[1].title , newBlogs: newBlogs[1].body});
 
 })
